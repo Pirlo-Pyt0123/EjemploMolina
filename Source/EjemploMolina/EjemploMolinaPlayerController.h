@@ -45,6 +45,8 @@ private:
 	/** Cambiar material del bloque cercano */
 	void CambiarMaterialBloque();
 
+	
+
 	/** Detecta si hay un bloque cercano para interactuar */
 	TArray<AActor*> DetectarBloquesCercanos();
 };

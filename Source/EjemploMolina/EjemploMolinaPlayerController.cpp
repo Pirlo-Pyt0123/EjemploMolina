@@ -26,6 +26,7 @@ void AEjemploMolinaPlayerController::PlayerTick(float DeltaTime)
 	{
 		MoveToMouseCursor();
 	}
+
 }
 
 void AEjemploMolinaPlayerController::SetupInputComponent()
@@ -154,6 +155,8 @@ void AEjemploMolinaPlayerController::CambiarMaterialBloque()
 	}
 }
 
+
+
 TArray<AActor*> AEjemploMolinaPlayerController::DetectarBloquesCercanos()
 {
 	TArray<AActor*> BloquesDetectados;
@@ -167,6 +170,9 @@ TArray<AActor*> AEjemploMolinaPlayerController::DetectarBloquesCercanos()
 
 	FVector PlayerLocation = PlayerPawn->GetActorLocation();
 	float Radio = 500.0f;  // Radio de detección
+
+	// Dibujar el radio de detección
+	DrawDebugSphere(GetWorld(), PlayerLocation, Radio, 32, FColor::Cyan, false, 0.8f, 0, 2.0f);
 
 	// Configurar parámetros de la esfera
 	TArray<FOverlapResult> Overlaps;
