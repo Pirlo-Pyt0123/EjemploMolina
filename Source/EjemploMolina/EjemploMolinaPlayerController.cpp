@@ -6,6 +6,10 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "EjemploMolinaCharacter.h"
 #include "Engine/World.h"
+#include "GameFramework/Actor.h"
+#include "DrawDebugHelpers.h"
+#include "Bloque.h"
+#include "Bloque2.h"
 
 AEjemploMolinaPlayerController::AEjemploMolinaPlayerController()
 {
@@ -37,6 +41,13 @@ void AEjemploMolinaPlayerController::SetupInputComponent()
 	InputComponent->BindTouch(EInputEvent::IE_Repeat, this, &AEjemploMolinaPlayerController::MoveToTouchLocation);
 
 	InputComponent->BindAction("ResetVR", IE_Pressed, this, &AEjemploMolinaPlayerController::OnResetVR);
+
+
+	// Asignar teclas para cambiar mallas y materiales
+	InputComponent->BindAction("CambiarMalla", IE_Pressed, this, &AEjemploMolinaPlayerController::CambiarMallaBloque);
+	InputComponent->BindAction("CambiarMaterial", IE_Pressed, this, &AEjemploMolinaPlayerController::CambiarMaterialBloque);
+
+
 }
 
 void AEjemploMolinaPlayerController::OnResetVR()
@@ -109,4 +120,78 @@ void AEjemploMolinaPlayerController::OnSetDestinationReleased()
 {
 	// clear flag to indicate we should stop updating the destination
 	bMoveToMouseCursor = false;
+}
+
+void AEjemploMolinaPlayerController::CambiarMallaBloque()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Cambiar Malla"));
+	AActor* BloqueCercano = DetectarBloqueCercano();
+	if (BloqueCercano)
+	{
+		if (ABloque* Bloque1 = Cast<ABloque>(BloqueCercano))
+		{
+			Bloque1->CambiarMalla();
+		}
+		else if (ABloque2* Bloque2 = Cast<ABloque2>(BloqueCercano))
+		{
+			Bloque2->CambiarMalla();
+		}
+	}
+}
+
+void AEjemploMolinaPlayerController::CambiarMaterialBloque()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Cambiar Material"));
+	AActor* BloqueCercano = DetectarBloqueCercano();
+	if (BloqueCercano)
+	{
+		if (ABloque* Bloque1 = Cast<ABloque>(BloqueCercano))
+		{
+			Bloque1->CambiarMaterial();
+		}
+		else if (ABloque2* Bloque2 = Cast<ABloque2>(BloqueCercano))
+		{
+			Bloque2->CambiarMaterial();
+		}
+	}
+}
+
+AActor* AEjemploMolinaPlayerController::DetectarBloqueCercano()
+{
+	
+
+	// Obtener posición del jugador
+	APawn* PlayerPawn = GetPawn();
+	if (!PlayerPawn)
+	{
+		return nullptr;
+	}
+
+	FVector PlayerLocation = PlayerPawn->GetActorLocation();
+	float Radio = 500.0f;  // Radio de detección
+
+	// Configurar parámetros de la esfera
+	TArray<FOverlapResult> Overlaps;
+	FCollisionShape CollisionShape = FCollisionShape::MakeSphere(Radio);
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(PlayerPawn);  // Ignorar al jugador
+
+	// Realizar detección esférica
+	bool bOverlap = GetWorld()->OverlapMultiByChannel(Overlaps, PlayerLocation, FQuat::Identity, ECC_Visibility, CollisionShape, QueryParams);
+
+	if (bOverlap)
+	{
+		for (const FOverlapResult& Result : Overlaps)
+		{
+			AActor* OverlappedActor = Result.GetActor();
+			if (OverlappedActor && (OverlappedActor->IsA(ABloque::StaticClass()) || OverlappedActor->IsA(ABloque2::StaticClass())))
+			{
+				// Mostrar esfera para depurar
+				DrawDebugSphere(GetWorld(), PlayerLocation, Radio, 12, FColor::Green, false, 1.0f, 0, 2.0f);
+				return OverlappedActor;
+			}
+		}
+	}
+
+	return nullptr;
 }

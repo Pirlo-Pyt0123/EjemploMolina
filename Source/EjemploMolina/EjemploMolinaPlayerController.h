@@ -38,6 +38,15 @@ protected:
 	/** Input handlers for SetDestination action. */
 	void OnSetDestinationPressed();
 	void OnSetDestinationReleased();
+private:
+	/** Cambiar malla del bloque cercano */
+	void CambiarMallaBloque();
+
+	/** Cambiar material del bloque cercano */
+	void CambiarMaterialBloque();
+
+	/** Detecta si hay un bloque cercano para interactuar */
+	AActor* DetectarBloqueCercano();
 };
 
 

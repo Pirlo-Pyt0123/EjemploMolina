@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Bloque.generated.h"
+#include "Bloque2.generated.h"
 
 UCLASS()
-class EJEMPLOMOLINA_API ABloque : public AActor
+class EJEMPLOMOLINA_API ABloque2 : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ABloque();
+	ABloque2();
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,7 +22,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Componentes")
     UStaticMeshComponent* MeshComponent;
 

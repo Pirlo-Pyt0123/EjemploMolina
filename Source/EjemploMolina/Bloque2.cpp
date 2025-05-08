@@ -1,16 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Bloque.h"
+#include "Bloque2.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine/StaticMesh.h"
+#include "Materials/MaterialInterface.h"
+#include "UObject/ConstructorHelpers.h"
 
 // Sets default values
-ABloque::ABloque()
+ABloque2::ABloque2()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-    // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-    PrimaryActorTick.bCanEverTick = true;
     MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
     RootComponent = MeshComponent;
 
@@ -24,10 +25,11 @@ ABloque::ABloque()
 
     // Cargar mallas y materiales específicos para Bloque1
     CargarMallasYMateriales();
+
 }
 
 // Called when the game starts or when spawned
-void ABloque::BeginPlay()
+void ABloque2::BeginPlay()
 {
 	Super::BeginPlay();
     if (MeshOptions.Num() > 0)
@@ -43,13 +45,13 @@ void ABloque::BeginPlay()
 }
 
 // Called every frame
-void ABloque::Tick(float DeltaTime)
+void ABloque2::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void ABloque::CambiarMalla()
+void ABloque2::CambiarMalla()
 {
     if (MeshOptions.Num() > 0)
     {
@@ -58,7 +60,7 @@ void ABloque::CambiarMalla()
     }
 }
 
-void ABloque::CambiarMaterial()
+void ABloque2::CambiarMaterial()
 {
     if (MaterialOptions.Num() > 0)
     {
@@ -67,7 +69,7 @@ void ABloque::CambiarMaterial()
     }
 }
 
-void ABloque::CargarMallasYMateriales()
+void ABloque2::CargarMallasYMateriales()
 {
     // Cambia las rutas según tus mallas y materiales específicos para Bloque1
     ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh1(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cone.Shape_Cone'"));
