@@ -124,15 +124,14 @@ void AEjemploMolinaPlayerController::OnSetDestinationReleased()
 
 void AEjemploMolinaPlayerController::CambiarMallaBloque()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Cambiar Malla"));
-	AActor* BloqueCercano = DetectarBloqueCercano();
-	if (BloqueCercano)
+	TArray<AActor*> BloquesCercanos = DetectarBloquesCercanos();
+	for (AActor* Bloque : BloquesCercanos)
 	{
-		if (ABloque* Bloque1 = Cast<ABloque>(BloqueCercano))
+		if (ABloque* Bloque1 = Cast<ABloque>(Bloque))
 		{
 			Bloque1->CambiarMalla();
 		}
-		else if (ABloque2* Bloque2 = Cast<ABloque2>(BloqueCercano))
+		else if (ABloque2* Bloque2 = Cast<ABloque2>(Bloque))
 		{
 			Bloque2->CambiarMalla();
 		}
@@ -141,30 +140,29 @@ void AEjemploMolinaPlayerController::CambiarMallaBloque()
 
 void AEjemploMolinaPlayerController::CambiarMaterialBloque()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Cambiar Material"));
-	AActor* BloqueCercano = DetectarBloqueCercano();
-	if (BloqueCercano)
+	TArray<AActor*> BloquesCercanos = DetectarBloquesCercanos();
+	for (AActor* Bloque : BloquesCercanos)
 	{
-		if (ABloque* Bloque1 = Cast<ABloque>(BloqueCercano))
+		if (ABloque* Bloque1 = Cast<ABloque>(Bloque))
 		{
 			Bloque1->CambiarMaterial();
 		}
-		else if (ABloque2* Bloque2 = Cast<ABloque2>(BloqueCercano))
+		else if (ABloque2* Bloque2 = Cast<ABloque2>(Bloque))
 		{
 			Bloque2->CambiarMaterial();
 		}
 	}
 }
 
-AActor* AEjemploMolinaPlayerController::DetectarBloqueCercano()
+TArray<AActor*> AEjemploMolinaPlayerController::DetectarBloquesCercanos()
 {
-	
+	TArray<AActor*> BloquesDetectados;
 
 	// Obtener posición del jugador
 	APawn* PlayerPawn = GetPawn();
 	if (!PlayerPawn)
 	{
-		return nullptr;
+		return BloquesDetectados;
 	}
 
 	FVector PlayerLocation = PlayerPawn->GetActorLocation();
@@ -186,12 +184,11 @@ AActor* AEjemploMolinaPlayerController::DetectarBloqueCercano()
 			AActor* OverlappedActor = Result.GetActor();
 			if (OverlappedActor && (OverlappedActor->IsA(ABloque::StaticClass()) || OverlappedActor->IsA(ABloque2::StaticClass())))
 			{
-				// Mostrar esfera para depurar
-				DrawDebugSphere(GetWorld(), PlayerLocation, Radio, 12, FColor::Green, false, 1.0f, 0, 2.0f);
-				return OverlappedActor;
+				// Agregar a la lista de bloques detectados
+				BloquesDetectados.Add(OverlappedActor);
 			}
 		}
 	}
 
-	return nullptr;
+	return BloquesDetectados;
 }
