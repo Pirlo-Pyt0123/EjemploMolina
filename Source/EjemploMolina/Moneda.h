@@ -48,6 +48,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Materiales")
 	UMaterialInterface* MaterialCobre;
+	//sonido de la moneda al ser recolectada por si acaso 
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	USoundBase* SonidoAlRecoger;
 
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,

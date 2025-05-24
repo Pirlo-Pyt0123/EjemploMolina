@@ -8,9 +8,8 @@
 #include "Engine/StaticMesh.h"
 #include "Components/PrimitiveComponent.h"
 #include "EjemploMolinaCharacter.h"
-
-
-
+#include "Sound/SoundBase.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMoneda::AMoneda()
@@ -37,6 +36,12 @@ AMoneda::AMoneda()
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MatOro(TEXT("Material'/Game/coin/GoldCoin.GoldCoin'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MatPlata(TEXT("Material'/Game/StarterContent/Materials/SilverCoin.SilverCoin'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MatCobre(TEXT("Material'/Game/StarterContent/Materials/CobreCoin.CobreCoin'"));
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> SonidoPickUp(TEXT("SoundWave'/Game/StarterContent/Audio/coin.coin'"));
+	if (SonidoPickUp.Succeeded())
+	{
+		SonidoAlRecoger = SonidoPickUp.Object;
+	}
 
 	if (MatOro.Succeeded())   MaterialOro = MatOro.Object;
 	if (MatPlata.Succeeded()) MaterialPlata = MatPlata.Object;
@@ -73,6 +78,12 @@ void AMoneda::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	if (Personaje)
 	{
 		Personaje->RecolectarMoneda(TipoMoneda, Valor);
+
+		if (SonidoAlRecoger)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, SonidoAlRecoger, GetActorLocation());
+		}
+
 		Destroy();
 	}
 }
