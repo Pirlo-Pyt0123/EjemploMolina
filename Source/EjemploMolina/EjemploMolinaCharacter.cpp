@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "EjemploMolinaCharacter.h"
 #include "UObject/ConstructorHelpers.h"
@@ -11,7 +11,8 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Materials/Material.h"
 #include "Engine/World.h"
-
+#include "Engine/StaticMesh.h"
+#include "Moneda.h"
 AEjemploMolinaCharacter::AEjemploMolinaCharacter()
 {
 	// Set size for player capsule
@@ -87,4 +88,24 @@ void AEjemploMolinaCharacter::Tick(float DeltaSeconds)
 			CursorToWorld->SetWorldRotation(CursorR);
 		}
 	}
+}
+
+void AEjemploMolinaCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AEjemploMolinaCharacter::RecolectarMoneda(ETipoMoneda Tipo, int32 Cantidad)
+{
+	int32& Total = MonedasRecolectadas.FindOrAdd(Tipo);
+	Total += Cantidad;
+
+	// Obtener los conteos actuales
+	int32 Oro = MonedasRecolectadas.FindRef(ETipoMoneda::Oro);
+	int32 Cobre = MonedasRecolectadas.FindRef(ETipoMoneda::Cobre);
+	int32 Plata = MonedasRecolectadas.FindRef(ETipoMoneda::Plata);
+
+	// Mostrar texto en pantalla todo el tiempo (key -1 mantiene el texto en el mismo lugar)
+	FString Texto = FString::Printf(TEXT(" Oro: %d    Plata: %d    Cobre: %d"), Oro, Plata, Cobre);
+	GEngine->AddOnScreenDebugMessage(1, 9999.f, FColor::Yellow, Texto, true, FVector2D(1.2f, 1.2f));
 }

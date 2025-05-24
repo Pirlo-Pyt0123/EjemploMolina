@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Moneda.h"
 #include "EjemploMolinaCharacter.generated.h"
 
 UCLASS(Blueprintable)
@@ -16,6 +17,8 @@ public:
 
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
+
+	virtual void BeginPlay() override;
 
 	/** Returns TopDownCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
@@ -36,5 +39,15 @@ private:
 	/** A decal that projects to the cursor location. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UDecalComponent* CursorToWorld;
+
+public:
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Monedas")
+	TMap<ETipoMoneda, int32> MonedasRecolectadas;
+
+	UPROPERTY(EditAnywhere)
+	ETipoMoneda TipoPermitido; 
+
+	void RecolectarMoneda(ETipoMoneda Tipo, int32 Cantidad);
 };
 

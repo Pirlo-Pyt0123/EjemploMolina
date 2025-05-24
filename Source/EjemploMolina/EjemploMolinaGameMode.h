@@ -13,6 +13,10 @@ class AEjemploMolinaGameMode : public AGameModeBase
 
 public:
 	AEjemploMolinaGameMode();
+
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
 };
 
 
